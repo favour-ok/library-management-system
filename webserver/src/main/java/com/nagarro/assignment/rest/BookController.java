@@ -34,7 +34,7 @@ public class BookController {
     @PostMapping
     public ResponseEntity<Void> createBook(@RequestBody BookRequest book) {
         bookService.createBook(book);
-        return new  ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

@@ -3,7 +3,9 @@ package com.nagarro.assignment.application.service;
 import com.nagarro.assignment.application.mapper.AuthorMapper;
 import com.nagarro.assignment.application.service.interfaces.AuthorService;
 import com.nagarro.assignment.domain.model.Author;
+import com.nagarro.assignment.domain.model.Book;
 import com.nagarro.assignment.dto.AuthorDTO;
+import com.nagarro.assignment.dto.request.AuthorRequest;
 import com.nagarro.assignment.exception.NotFoundException;
 import com.nagarro.assignment.intrastructure.persistence.jpa.AuthorRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,13 +44,26 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void createAuthor(Author author) {
-        authorRepository.save(author);
+    public void createAuthor(AuthorRequest author) {
+        Author created = buildAuthorFromRequest(author);
+        authorRepository.save(created);
     }
 
     @Override
-    public void updateAuthor(Author author) {
-        authorRepository.save(author);
+    public void updateAuthor(AuthorRequest author) {
+        Author existingAuthor = authorRepository.findById(author.getId()).orElseThrow(() -> new NotFoundException("Author not found"));
+
+        existingAuthor.setName(author.getName());
+        existingAuthor.setDescription(author.getDescription());
+
+        authorRepository.save(existingAuthor);
+    }
+
+    private Author buildAuthorFromRequest(AuthorRequest authorRequest) {
+        return Author.builder()
+                .name(authorRequest.getName())
+                .description(authorRequest.getDescription())
+                .build();
     }
 
     @Override

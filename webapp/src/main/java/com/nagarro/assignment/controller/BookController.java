@@ -47,10 +47,6 @@ public class BookController {
                              BindingResult result,
                              Model model) {
 
-        System.out.println("Book Request: " + book);
-        System.out.println("Has Errors: " + result.hasErrors());
-        System.out.println("Errors: " + result.getAllErrors());
-
         if (result.hasErrors()) {
             model.addAttribute("allAuthors", authorService.findAllAuthors());
             model.addAttribute("books", bookService.findPaginated(Pageable.ofSize(10))); // Ensure books is populated

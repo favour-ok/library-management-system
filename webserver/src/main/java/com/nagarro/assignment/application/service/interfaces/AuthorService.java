@@ -2,6 +2,7 @@ package com.nagarro.assignment.application.service.interfaces;
 
 import com.nagarro.assignment.domain.model.Author;
 import com.nagarro.assignment.dto.AuthorDTO;
+import com.nagarro.assignment.dto.request.AuthorRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,9 +14,9 @@ public interface AuthorService {
 
     AuthorDTO findAuthorById(Long id);
 
-    void createAuthor(Author author);
+    void createAuthor(AuthorRequest author);
 
-    void updateAuthor(Author author);
+    void updateAuthor(AuthorRequest author);
 
     void deleteAuthor(Long id);
 

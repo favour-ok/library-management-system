@@ -1,7 +1,9 @@
 package com.nagarro.assignment.application.service;
 
 import com.nagarro.assignment.dto.AuthorDTO;
+import com.nagarro.assignment.dto.request.AuthorRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -40,21 +42,21 @@ public class AuthorService {
                 .block();
     }
 
-    public void createAuthor(AuthorDTO authorDTO) {
+    public void createAuthor(AuthorRequest request) {
         webClient.post()
                 .uri("/api/authors")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(authorDTO)
+                .bodyValue(request)
                 .retrieve()
                 .toBodilessEntity()
                 .block();
     }
 
-    public void updateAuthor(Long id, AuthorDTO authorDTO) {
+        public void updateAuthor(Long id, AuthorRequest request) {
         webClient.put()
                 .uri("/api/authors/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(authorDTO)
+                .bodyValue(request)
                 .retrieve()
                 .toBodilessEntity()
                 .block();
@@ -69,19 +71,15 @@ public class AuthorService {
     }
 
     public Page<AuthorDTO> findPaginated(Pageable pageable) {
-        List<AuthorDTO> authors = webClient.get()
+        return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/api/authors/paginated")
                         .queryParam("page", pageable.getPageNumber())
                         .queryParam("size", pageable.getPageSize())
-                        .queryParam("sort", pageable.getSort().toString())
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToFlux(AuthorDTO.class)
-                .collectList()
+                .bodyToMono(new ParameterizedTypeReference<RestResponsePage<AuthorDTO>>() {})
                 .block();
-
-        return new PageImpl<>(authors, pageable, authors != null ? authors.size() : 0);
     }
 }
