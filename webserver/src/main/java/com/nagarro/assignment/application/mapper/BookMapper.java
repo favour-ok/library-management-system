@@ -15,11 +15,11 @@ public interface BookMapper {
 
     BookDTO toBookDTO(Book book);
 
-    @Mapping(target = "authors", source = "authors")
+//    @Mapping(target = "authors", source = "authors")
     BookDTO toDetailedBookDTO(Book book);
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
+//    @Mapping(target = "id", source = "id")
+//    @Mapping(target = "name", source = "name")
     AuthorSimpleDTO toAuthorSimpleDTO(Author author);
 
     default Set<AuthorSimpleDTO> mapAuthors(Set<Author> authors) {
